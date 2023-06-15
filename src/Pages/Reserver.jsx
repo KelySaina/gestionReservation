@@ -16,8 +16,12 @@ import { useState } from "react";
 import SmartphoneIcon from '@mui/icons-material/Smartphone';
 import BadgeIcon from '@mui/icons-material/Badge';
 import EditCalendarRoundedIcon from '@mui/icons-material/EditCalendarRounded';
+import axios from "axios";
+import SuccessReservation from "../Components/SuccessReservationComponent";
+
 
 const Reserver = () =>{
+
     const location = useLocation();
     const qP = new URLSearchParams(location.search);
     const url = qP.get('arg1')
@@ -51,16 +55,18 @@ const Reserver = () =>{
         if(inputValue.trim()=== ''){
             setIsValidPhone(true);
             setIsTextFieldDAVisible(false)
+            setIsTextFieldVisible(false)
         }else if (inputValue.length < 10){
             if((/^\d+$/.test(inputValue))){
                 setIsValidPhone(true);
             }else{
                 setIsValidPhone(false);
                 setIsTextFieldDAVisible(false)
+                setIsTextFieldVisible(false)
             }
         }else{
             setIsValidPhone(/^03[23489]\d{7}$/.test(inputValue));
-            (/^03[23489]\d{7}$/.test(inputValue))?setIsTextFieldDAVisible(true):setIsTextFieldDAVisible(false)
+            (/^03[23489]\d{7}$/.test(inputValue))?setIsTextFieldDAVisible(true)&&setIsTextFieldVisible(false):setIsTextFieldDAVisible(false)&&setIsTextFieldVisible(false)
         }
     };
 
@@ -74,7 +80,6 @@ const Reserver = () =>{
         const currentDate = new Date().toLocaleDateString().valueOf();        
         const enteredDate = new Date(selectedDate).toLocaleDateString().valueOf();
         setIsValidDate((enteredDate >= currentDate));
-        console.log(enteredDate+":"+currentDate)
         if(enteredDate>=new Date(setOffDate).toLocaleDateString().valueOf()){
             setSetOffDate('')
             setIsValidSODate(true)
@@ -95,9 +100,38 @@ const Reserver = () =>{
         
         (new Date(arrivalDate).toLocaleDateString().valueOf() <= enteredDate)?setIsButtonVisible(true):setIsButtonVisible(false)
     };
+    const [isOpen,setIsOpen] = useState(false)
 
-    const validerClick = ()=>{
-        console.log(fullName+":"+phoneNumber+":"+arrivalDate+":"+setOffDate)
+    const validerClick = async ()=>{
+        const fd = {
+            "fullName": fullName,
+            "room_number": titre,
+            "phone": phoneNumber,
+            "dateA": arrivalDate,
+            "dateS": setOffDate
+        }
+
+        const postForm = toFormData(fd)
+        
+
+        const response = await axios.post("http://localhost:1060/api/handles.php?action=postReservation", postForm);
+        console.log(response.data);
+        if(response.data[0].info === 'success'){
+            console.log("succes")
+            setIsOpen(true)
+        }else{
+            console.log("error")
+        }
+    }
+
+    function toFormData(f){
+        const fd = new FormData();
+        for (let key in f){
+            if(f.hasOwnProperty(key)){
+                fd.append(key,f[key])
+            }
+        }
+        return fd;
     }
 
 
@@ -281,6 +315,12 @@ const Reserver = () =>{
                     </CardContent>
                    
             </Card>
+            {
+                isOpen && (
+                    <SuccessReservation/>
+                )
+            }
+            
             <Footer/>
         </>
     )

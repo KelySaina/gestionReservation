@@ -18,13 +18,13 @@ class Reservation{
     {
         $res = array('error' => false);
         
-        $idRoom = $this->select_next_available_room_id('R' . $floor . '%');
+        $idRoom = $floor;
         $reservationDate = date('Y-m-d');
 
-        if(strtotime($checkInDate) == false || strtotime($checkOutDate) == false || strtotime($checkInDate) < strtotime(date('Y-m-d')) || strtotime($checkInDate) > strtotime($checkOutDate) ){
+        /*if(strtotime($checkInDate) == false || strtotime($checkOutDate) == false || strtotime($checkInDate) <= strtotime(date('Y-m-d')) || strtotime($checkInDate) >= strtotime($checkOutDate) ){
             $res['message'] = 'Check date';
             return $res;
-        }
+        }*/
 
         if(strtotime(date('Y-m-d')) < strtotime($checkInDate)){
             $stat = 'On going';
@@ -34,10 +34,10 @@ class Reservation{
             if($this->conn->query("INSERT INTO reservation (id_room, check_in_date, check_out_date, reservation_date, full_name, phone, stat) VALUES ('$idRoom', '$checkInDate', '$checkOutDate', '$reservationDate', '$fullName', '$phone','$stat')")){
                 $res['message'] = 'Reservation created successfully';
                 $res['reservationId'] = $stmt->insert_id;
-                $res ['details'] = $idRoom.":".$reservationDate.":".$fullName.":".$phone;
+                $res['details'] = $idRoom.":".$reservationDate.":".$fullName.":".$phone;
+                $res['info'] = 'success';
 
             } else {
-                echo "nope";
                 $res['error'] = true;
                 $res['message'] = 'Error creating reservation: ' . $stmt->error;
             }

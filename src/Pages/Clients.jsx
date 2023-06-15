@@ -28,7 +28,7 @@ const Clients = ()=>{
     const handleSearch = (searchText) => {
         const filteredRooms = roomAvailable.filter((room) =>
             searchText.includes('pers')?room.number_of_person.includes(searchText.split('pers')[0]) :
-            searchText.includes('Ar')?room.price.includes(searchText.split('Ar')[0]) :
+            room.price.includes(searchText) ||
             room.description.split(":")[0].toUpperCase().includes(searchText.toUpperCase())
         );
         setFilteredRoomDet(filteredRooms);
