@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import SellRoundedIcon from '@mui/icons-material/SellRounded';
 import ModalComponent from './ModalComponent';
+import { Link } from 'react-router-dom';
 
 const CardComponent = ({img_url,room_number,simple_description, price, nop, desc})=> {
   
@@ -34,7 +35,7 @@ const CardComponent = ({img_url,room_number,simple_description, price, nop, desc
           </div>
 
           <CardActions>
-            <Button variant='contained' size="small" style={{background:'#e0cc1c', fontWeight:'bold'}}>Reserver</Button>
+            <Link to={`/reserver?arg1=${img_url}&arg2=${room_number}&arg3=${desc}&arg4=${price}`}><Button variant='contained' size="small" style={{background:'#e0cc1c', fontWeight:'bold'}}>Reserver</Button></Link>
           </CardActions>
         </div>
 

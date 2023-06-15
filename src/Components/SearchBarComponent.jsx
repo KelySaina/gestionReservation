@@ -14,7 +14,7 @@ const SearchBarComponent = ({ onSearch }) =>{
             <TextField
                 variant='outlined'
                 size="small"
-                placeholder='Ex: R001,2000Ar, 2pers, simple'
+                placeholder='Ex: 2000Ar, 2pers, simple'
                 label='Search rooms'
                 InputProps={{
                     endAdornment: <SearchIcon fontSize='small' />,

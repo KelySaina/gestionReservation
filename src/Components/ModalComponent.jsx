@@ -17,6 +17,7 @@ import {
     Grid
   } from "@mui/material";
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const ModalComponent = ({ img, titre, description, nbPers, prix }) => {
     
@@ -45,6 +46,7 @@ const ModalComponent = ({ img, titre, description, nbPers, prix }) => {
       if (d === 'WC') {
         icons.push(<WcIcon />)
       }
+      return;
     })
   return (
     <>
@@ -101,9 +103,7 @@ const ModalComponent = ({ img, titre, description, nbPers, prix }) => {
                   </Typography>
                 </Typography>
                 <CardActions style={{ display: 'flex', justifyContent: 'space-evenly'}}>
-                    <Button variant='contained' size="small" style={{background:'#e0cc1c', fontWeight:'bold'}}>
-                      Reserver
-                    </Button>
+                    <Link to={`/reserver?arg1=${img}&arg2=${titre}&arg3=${description}&arg4=${prix}`}><Button variant='contained' size="small" style={{background:'#e0cc1c', fontWeight:'bold'}}>Reserver</Button></Link>
                     <Button size="small" onClick={closeDetails} style={{color:'#e0cc1c', width:'82px'}}>
                       <b>FERMER</b>
                     </Button>

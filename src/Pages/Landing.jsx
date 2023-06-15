@@ -19,7 +19,7 @@ const Landing = ()=>{
                     <div class="container">
                         <div class="intro-text">
 
-                            <div class="intro-heading" style={{color:'#e0cc1c', height:'135px'}}><span><TypeWriterEffectComponent text="Des prix abordables:Des chambres confortables:Un sejour inoubliable"/> </span></div>
+                            <div class="intro-heading" style={{color:'#e0cc1c', height:'135px'}}><span><TypeWriterEffectComponent text="Des chambres confortables:Des prix abordables:Un sejour inoubliable"/> </span></div>
                             <Link to="/Clients">
                                 <Button variant="contained" endIcon={<ArrowForwardIcon />} size="large" style={{backgroundColor:'#e0cc1c', padding:'17px', fontWeight:'bolder'}}>
                                     PARCOURIR
