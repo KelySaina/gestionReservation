@@ -36,10 +36,11 @@ const Clients = ()=>{
 
     return(
         <>  
-            <div style={{padding:'10px'}}>
+            <div style={{padding:'15px'}}>
                 <HeaderComponent/>
                 <div style={{marginTop: '100px'}}>
                     <SearchBarComponent onSearch={handleSearch}/>
+                    
                     <Grid container spacing={1.5} style={{display: 'flex', justifyContent: 'center', alignContent: 'flex-start'}}>
                     {
                         filteredRoomDet.map((room,i)=>(

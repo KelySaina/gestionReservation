@@ -18,6 +18,9 @@ import BadgeIcon from '@mui/icons-material/Badge';
 import EditCalendarRoundedIcon from '@mui/icons-material/EditCalendarRounded';
 import axios from "axios";
 import SuccessReservation from "../Components/SuccessReservationComponent";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 
 const Reserver = () =>{
@@ -101,6 +104,7 @@ const Reserver = () =>{
         (new Date(arrivalDate).toLocaleDateString().valueOf() <= enteredDate)?setIsButtonVisible(true):setIsButtonVisible(false)
     };
     const [isOpen,setIsOpen] = useState(false)
+    const [QRText,setQRtext] = useState('')
 
     const validerClick = async ()=>{
         const fd = {
@@ -119,6 +123,8 @@ const Reserver = () =>{
         if(response.data[0].info === 'success'){
             console.log("succes")
             setIsOpen(true)
+            setQRtext(response.data[0].reservationId)
+            toast.success(response.data[0].message);
         }else{
             console.log("error")
         }
@@ -311,13 +317,14 @@ const Reserver = () =>{
                                 </Button>
                                 )
                             }
+                            <ToastContainer/>
                         </div>
                     </CardContent>
                    
             </Card>
             {
                 isOpen && (
-                    <SuccessReservation/>
+                    <SuccessReservation text={QRText}/>
                 )
             }
             

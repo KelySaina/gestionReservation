@@ -31,10 +31,19 @@ class Reservation{
         }
         
         if ($idRoom !== null) {
+            $char = 'KJHGFDSAZXCVBNMqwertyuiopasdfghjklzxcvbnmQWERTYUIOPL';
+            $randS = '';
+            $char2 = '1234567890!@#$%^&*()+_';
+            $randS2 = '';
+            for($i = 0; $i<7;$i++){
+                $randS .= $char[rand(0,strlen($char)-1)];
+            }
+            for($i = 0; $i<5;$i++){
+                $randS2 .= $char[rand(0,strlen($char2)-1)];
+            }
             if($this->conn->query("INSERT INTO reservation (id_room, check_in_date, check_out_date, reservation_date, full_name, phone, stat) VALUES ('$idRoom', '$checkInDate', '$checkOutDate', '$reservationDate', '$fullName', '$phone','$stat')")){
                 $res['message'] = 'Reservation created successfully';
-                $res['reservationId'] = $stmt->insert_id;
-                $res['details'] = $idRoom.":".$reservationDate.":".$fullName.":".$phone;
+                $res['reservationId'] = $randS."_".$this->conn->insert_id."_".$randS2."_".strrev($randS.$randS2);
                 $res['info'] = 'success';
 
             } else {
