@@ -21,6 +21,15 @@
         array_push($result, $room->list_available_room());
     }
 
+    if($action == 'getRoomRes'){
+        array_push($result, $reservation->get_reservation_by_id($_POST['id']));
+    }
+
+    if($action == 'cancelRes'){
+        array_push($result, $reservation->cancel_reservation($_POST['id']));
+    }
+
+
     if($action == 'postReservation'){
         $checkInDate = $_POST['dateA'];
         $checkOutDate = $_POST['dateS'];

@@ -47,6 +47,9 @@ const SuccessReservation = ({text})=>{
                         <Typography>
                             Il vous sera necessaire pour <b>Annuler</b> ou <b>Confirmer</b> votre reservation
                         </Typography>
+                        <Typography>
+                            Vous pouvez annuler votre reservation dans les prochaines <b>6h</b>
+                        </Typography>
                     </p>
                     <p><QRCode  id='qr-code' value={text} style={{border:'3px solid yellow', borderRadius:'5px', padding:'4px', background:'white'}}/></p>
                     <p>

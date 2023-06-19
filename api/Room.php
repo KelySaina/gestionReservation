@@ -32,7 +32,7 @@ class Room{
     public function list_available_room(){
         $res = array('error'=>false);
 
-        $sql = "select room_number, description, number_of_person, price, img_url from room where room_number not in (select id_room from reservation)  ";
+        $sql = "select room_number, description, number_of_person, price, img_url from room where room_number not in (select id_room from reservation where stat = 'On going')  ";
         $result = $this->conn->query($sql);
 
         if($result->num_rows > 0){

@@ -20,6 +20,7 @@ class Reservation{
         
         $idRoom = $floor;
         $reservationDate = date('Y-m-d');
+        $reservationTime = date('H:i');
 
         /*if(strtotime($checkInDate) == false || strtotime($checkOutDate) == false || strtotime($checkInDate) <= strtotime(date('Y-m-d')) || strtotime($checkInDate) >= strtotime($checkOutDate) ){
             $res['message'] = 'Check date';
@@ -42,18 +43,21 @@ class Reservation{
                 $randS2 .= $char[rand(0,strlen($char2)-1)];
             }
             if($this->conn->query("INSERT INTO reservation (id_room, check_in_date, check_out_date, reservation_date, full_name, phone, stat) VALUES ('$idRoom', '$checkInDate', '$checkOutDate', '$reservationDate', '$fullName', '$phone','$stat')")){
-                $res['message'] = 'Reservation created successfully';
-                $res['reservationId'] = $randS."_".$this->conn->insert_id."_".$randS2."_".strrev($randS.$randS2);
+                $insertId = $this->conn->insert_id;
+                $res['message'] = 'Votre reservation a ete effectuee avec succes';
+                $res['reservationId'] = $randS."_".$insertId."_".$randS2."_".strrev($randS.$randS2)."_".$reservationTime;
+                $res['time'] = $reservationTime;
                 $res['info'] = 'success';
+                
 
             } else {
                 $res['error'] = true;
-                $res['message'] = 'Error creating reservation: ' . $stmt->error;
+                $res['message'] = 'Une erreur s\'est produite ' . $stmt->error;
             }
         
         } else {
             $res['error'] = true;
-            $res['message'] = 'No available room found for the specified floor';
+            $res['message'] = 'Aucune chambre disponible';
         }
         
         return $res;
@@ -74,7 +78,7 @@ class Reservation{
             $res['reservations'] = $reservations;
         } else {
             $res['error'] = true;
-            $res['message'] = 'No reservations found';
+            $res['message'] = 'Aucune reservation n\'a ete trouvee';
         }
 
         $stmt->close();
@@ -101,18 +105,19 @@ class Reservation{
         return $res;
     }
 
-    public function cancel_reservation($reservationDate)
+    public function cancel_reservation($id)
     {
         $res = array('error' => false);
         
-        $stmt = $this->conn->prepare("delete from reservation where reservation_date = '$reservationDate' and phone = '$phone'");
-        $stmt->bind_param("i", $reservationDate);
+        $stmt = $this->conn->prepare("update reservation set stat='Cancelled' where id=?");
+        $stmt->bind_param("i", $id);
         
         if ($stmt->execute()) {
-            $res['message'] = 'Reservation cancelled successfully';
+            $res['message'] = 'Votre reservation a ete annulee';
+            $res['info'] = 'success';
         } else {
             $res['error'] = true;
-            $res['message'] = 'Error deleting reservation: ' . $stmt->error;
+            $res['message'] = 'Une erreur s\' est produite' . $stmt->error;
         }
 
         $stmt->close();
@@ -149,6 +154,29 @@ class Reservation{
         if ($reservations) {
             $res['reservations'] = $reservations;
         } else {
+            $res['error'] = true;
+            $res['message'] = 'No reservations found for the given search term';
+        }
+
+        $stmt->close();
+        return $res;
+    }
+
+    public function get_reservation_by_id($id){
+        $res = array('error' => false);
+        
+        $stmt = $this->conn->prepare("select room.img_url, room.room_number, room.description, room.number_of_person, room.price from room join reservation on room.room_number = reservation.id_room where reservation.id = '$id' and reservation.stat = 'On going'");
+        
+        $stmt->execute();
+        
+        $result = $stmt->get_result();
+        $reservations = $result->fetch_all(MYSQLI_ASSOC);
+        
+        if ($reservations) {
+            $res['reservationRoomdet'] = $reservations;
+            $res['info'] = 'success';
+        } else {
+            $res['info'] = 'error';
             $res['error'] = true;
             $res['message'] = 'No reservations found for the given search term';
         }

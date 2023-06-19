@@ -119,14 +119,14 @@ const Reserver = () =>{
         
 
         const response = await axios.post("http://localhost:1060/api/handles.php?action=postReservation", postForm);
-        console.log(response.data);
         if(response.data[0].info === 'success'){
-            console.log("succes")
             setIsOpen(true)
             setQRtext(response.data[0].reservationId)
-            toast.success(response.data[0].message);
+            toast.success(response.data[0].message +' a '+response.data[0].time+". Vous avez 6h pour annuler votre reservation");
+
         }else{
             console.log("error")
+            toast.error(response.data[0].message);
         }
     }
 

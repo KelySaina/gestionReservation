@@ -2,8 +2,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import { TextField } from '@mui/material';
 import { useState } from 'react';
 
-import EventBusyIcon from '@mui/icons-material/EventBusy';
-import { Link } from "react-router-dom";
+
+
 
 const SearchBarComponent = ({ onSearch }) =>{
     const [searchText, setSearchText] = useState('');
@@ -13,7 +13,7 @@ const SearchBarComponent = ({ onSearch }) =>{
     onSearch(value);
   };
     return(
-        <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', marginTop:'115px', marginBottom:'15px'}}>
+        <div style={{display:'flex', alignItems:'center', justifyContent:'center', marginTop:'115px', marginBottom:'15px'}}>
             <TextField
                 variant='outlined'
                 size="small"
@@ -25,7 +25,6 @@ const SearchBarComponent = ({ onSearch }) =>{
                 value={searchText}
                 onInput={handleInputChange}
             />
-            <Link to='/annulerReserver' style={{color:'red'}}><EventBusyIcon size='large' titleAccess='Annuler reservation'/></Link>
         </div>
         
     );
