@@ -38,7 +38,7 @@ export default function TableRoom() {
   }, []);
 
   const header = [
-    "NUMERO",
+    "NUMERO DE CHAMBRE",
     "PRIX",
     "CAPACITE",
     "DESCRIPTION",
@@ -107,7 +107,7 @@ export default function TableRoom() {
       setDisableValider(false)
     }
 
-    if (name === 'nCap' && parseInt(value.trim()) <=0 || name === 'nCap' && value.trim() === ''){
+    if ((name === 'nCap' && parseInt(value.trim()) <= 0) || (name === 'nCap' && value.trim() === '')){
       setDisableValider(true)
     }else{
       setDisableValider(false)
@@ -248,7 +248,7 @@ export default function TableRoom() {
             <TableHead>
               <TableRow>
                 {header.map((column) => (
-                  <TableCell key={column}>{column}</TableCell>
+                  <TableCell key={column}><b>{column}</b></TableCell>
                 ))}
               </TableRow>
             </TableHead>
@@ -282,26 +282,7 @@ export default function TableRoom() {
                 ))
               }
             </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-                  colSpan={6}
-                  count={rows.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  SelectProps={{
-                    inputProps: {
-                      "aria-label": "rows per page",
-                    },
-                    native: true,
-                  }}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                  ActionsComponent={TablePaginationActions}
-                />
-              </TableRow>
-            </TableFooter>
+            
           </TableComponent>
         </Card>
       </ContainerComponent>

@@ -61,6 +61,10 @@
         array_push($result, $reservation->create_reservation($checkInDate,$checkOutDate,$fullName,$phone,$floor));
     }
 
+    if($action == 'getAllRes'){
+        array_push($result, $reservation->list_reservations());
+    }
+
     echo json_encode($result);
 
 ?>
