@@ -23,9 +23,9 @@ const HeaderAdminComponent = () =>{
                     <Link to="/" class="navbar-brand" href="#page-top">KS Hotel</Link>
                     <div class="intro-lead-in"><Typography sx={{color:'whitesmoke', fontSize:{xs:'14px'}}}>Espace Administrateur</Typography></div>
                 </div>
-                <div style={{width:'10%'}}>
+                {/*<div style={{width:'10%'}}>
                     <Link to='/login' style={{color:'whitesmoke'}}><LogoutIcon size='medium' titleAccess='Log out'/>Log out</Link>
-                </div>
+                </div>*/}
             </Typography>
             <div class="fixed-top" style={{margin:'auto', marginTop:'60px',display:'flex', alignItems:'center', justifyContent: 'center'}}>
                 <span style={{display:isVisible?'inline':'none', width:'75px'}}><Link style={{color:"#e0cc1c"}} onClick={()=>{setIsVisibleRes(false);setIsVisible(false);setIsVisibleRoom(true);setIsLandingVisible(false)}}>Chambres</Link></span>

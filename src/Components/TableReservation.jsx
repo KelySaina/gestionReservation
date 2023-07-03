@@ -173,7 +173,7 @@ const validerClick = async ()=>{
 const [openM,setOpenM] = useState(false)
 const [idRes, setIdRes] = useState('')
 
-const [radioValue, setRadioValue] = useState('Cancelled');
+const [radioValue, setRadioValue] = useState('Ended');
 
 const handleRadioChange = (event) => {
   setRadioValue(event.target.value);
@@ -190,6 +190,7 @@ const validerMarque = async ()=>{
   getAllReservations()
   getRoomAvailable()
   setOpenM(false)
+  setRadioValue('Ended')
 }
 
 const [searchText,setSearchText] = useState('')
@@ -383,9 +384,10 @@ const handleSearch = (searchText) => {
         <DialogContent>
             <h3>Marquer le status une reservation</h3>
             <RadioGroup
-              defaultValue="Cancelled"
+              defaultValue="Ended"
               onChange={handleRadioChange}
             >
+            <FormControlLabel value="Ended" control={<Radio />} label="Marquer 'Fin de sejours'" />
             <FormControlLabel value="Cancelled" control={<Radio />} label="Marquer 'Annulee'" />
             <FormControlLabel value="On going" control={<Radio />} label="Marquer 'En cours'" />
             </RadioGroup>
