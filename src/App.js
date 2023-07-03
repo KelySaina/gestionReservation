@@ -4,6 +4,7 @@ import Clients from './Pages/Clients.jsx';
 import Reserver from './Pages/Reserver';
 import DecodeQR from './Pages/DecodeQR'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Admin from './Pages/Admin';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/clients" element={<Clients/>} />
         <Route path="/reserver" element={<Reserver/>} />
         <Route path="/annulerReserver" element={<DecodeQR/>} />
+        <Route path="/admin" element={<Admin/>} />
       </Routes>
     </Router>
   );

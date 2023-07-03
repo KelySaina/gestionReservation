@@ -17,6 +17,27 @@
         $action = $_GET['action'];
     }
 
+    if($action == 'getAllRoom'){
+        array_push($result, $room->list_all_room());
+    }
+
+    if($action == 'getRoomData'){
+        array_push($result, $room->get_room_by_id($_POST['id']));
+    }
+
+    if($action == 'checkImg'){
+        array_push($result, $room->search_img($_POST['filepath']));
+    }
+
+    if($action == 'modRoom'){
+        $roomNumber = $_POST['id'];
+        $description = $_POST['nDesc'];
+        $numberOfPerson = $_POST['nCap'];
+        $price = $_POST['nPrix'];
+        $img = $_POST['nImg'];
+        array_push($result, $room->modify_room_details($roomNumber,$description,$numberOfPerson,$price,$img));
+    }
+
     if($action == 'getRoomDet'){
         array_push($result, $room->list_available_room());
     }

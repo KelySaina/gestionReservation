@@ -44,6 +44,36 @@ class Room{
         return $res;
     }
 
+    public function list_all_room(){
+        $res = array('error'=>false);
+
+        $sql = "select room_number, description, number_of_person, price, img_url from room";
+        $result = $this->conn->query($sql);
+
+        if($result->num_rows > 0){
+            while($rows = $result->fetch_assoc()){
+                array_push($res,$rows);
+            }
+        }
+
+        return $res;
+    }
+
+    public function get_room_by_id($id){
+        $res = array('error'=>false);
+
+        $sql = "select description, number_of_person, price, img_url from room where room_number = '$id'";
+        $result = $this->conn->query($sql);
+
+        if($result->num_rows > 0){
+            while($rows = $result->fetch_assoc()){
+                array_push($res,$rows);
+            }
+        }
+
+        return $res;
+    }
+
     public function list_booked_room(){
         $res = array('error'=>false);
 
@@ -104,16 +134,14 @@ class Room{
         return $res;
     }
 
-    public function search_available_room_for_number_of_person($number){
-        $res = array('error'=>false);
+    public function search_img($fp){
+        $res = false;
 
-        $sql = "select room_number, description, number_of_person, price from room where room_number not in (select id_room from reservation) and number_of_person = ".$number;
+        $sql = "select img_url from room where img_url = '$fp'";
         $result = $this->conn->query($sql);
 
         if($result->num_rows > 0){
-            while($rows = $result->fetch_assoc()){
-                array_push($res,$rows);
-            }
+            $res = true;
         }
 
         return $res;
@@ -138,15 +166,18 @@ class Room{
         return $res;
     }
 
-    public function modify_room_details($roomNumber,$description,$numberOfPerson,$price){
-        $res = array('error'=>false);
 
-        $sql = "update room set description = '".$description."', number_of_person = ".$numberOfPerson.", price = ".$price." where room_number not in (select id_room from reservation) and room_number = '".$roomNumber."'";
+    public function modify_room_details($roomNumber,$description,$numberOfPerson,$price,$img){
+        $res = array('error'=>false);
+        try{
+        $sql = "update room set description = '".$description."', number_of_person = '".$numberOfPerson."', price = '".$price."', img_url = '".$img."' where room_number not in (select id_room from reservation where stat = 'On going') and room_number = '".$roomNumber."'";
 
         if ($this->conn->query($sql) === TRUE) {
-            $res['msg'] = "Updated successfully";
-        } else {
+            $res['msg'] = "Succes de la modification";
+        }
+        }catch(mysqli_sql_exception $e){
             $res['msg'] = "Error updating record: " . $conn->error;
+            $res['info'] = "error";
         }
 
         return $res;
