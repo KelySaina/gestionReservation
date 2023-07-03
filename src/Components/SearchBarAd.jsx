@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 
 
-const SearchBarComponent = ({ onSearch }) =>{
+const SearchBarAd = ({ onSearch }) =>{
     const [searchText, setSearchText] = useState('');
     const handleInputChange = (e) => {
     const value = e.target.value;
@@ -13,11 +13,10 @@ const SearchBarComponent = ({ onSearch }) =>{
     onSearch(value);
   };
     return(
-        <div style={{display:'flex', alignItems:'center', justifyContent:'center', marginTop:'115px', marginBottom:'15px'}}>
             <TextField
                 variant='outlined'
                 size="small"
-                placeholder='Ex: 2000Ar, 2pers, simple'
+                placeholder='Nom, Numero, Status'
                 label='Rechercher'
                 InputProps={{
                     endAdornment: <SearchIcon fontSize='small' />,
@@ -25,9 +24,8 @@ const SearchBarComponent = ({ onSearch }) =>{
                 value={searchText}
                 onInput={handleInputChange}
             />
-        </div>
         
     );
 }
 
-export default SearchBarComponent;
+export default SearchBarAd;

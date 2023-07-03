@@ -6,12 +6,14 @@ import ListIcon from '@mui/icons-material/List';
 import { useState } from 'react';
 import TableRoom from "../Components/TableRoom"; 
 import TableReservation from "../Components/TableReservation";
+import  TypeWriterEffectComponent from '../Components/TypeWriterEffectComponent'
 
 const HeaderAdminComponent = () =>{
 
     const [isVisible, setIsVisible] = useState(false)
     const [isVisibleRoom, setIsVisibleRoom] = useState(false)
     const [isVisibleRes, setIsVisibleRes] = useState(false)
+    const [isLandingVisible, setIsLandingVisible] = useState(true)
 
     return(
         <>
@@ -25,14 +27,14 @@ const HeaderAdminComponent = () =>{
                     <Link to='/login' style={{color:'whitesmoke'}}><LogoutIcon size='medium' titleAccess='Log out'/>Log out</Link>
                 </div>
             </Typography>
-            <div style={{margin:'auto', marginTop:'60px',display:'flex', alignItems:'center', justifyContent: 'center'}}>
-                <span style={{display:isVisible?'inline':'none', width:'100px'}}><Link style={{color:"#660B32"}} onClick={()=>{setIsVisibleRes(false);setIsVisible(false);setIsVisibleRoom(true)}}>Chambres</Link></span>
-                <div class="bg-dark" style={{margin:'0 12px 0 12px', width:'55px', height:'55px', borderRadius:'50%',display:'flex', alignItems:'center', justifyContent: 'center'}}>
+            <div class="fixed-top" style={{margin:'auto', marginTop:'60px',display:'flex', alignItems:'center', justifyContent: 'center'}}>
+                <span style={{display:isVisible?'inline':'none', width:'75px'}}><Link style={{color:"#e0cc1c"}} onClick={()=>{setIsVisibleRes(false);setIsVisible(false);setIsVisibleRoom(true);setIsLandingVisible(false)}}>Chambres</Link></span>
+                <div class="bg-dark" style={{ margin:'0 12px 0 12px', width:'55px', height:'55px', borderRadius:'50%',display:'flex', alignItems:'center', justifyContent: 'center'}}>
                     <IconButton onClick={()=>{isVisible?setIsVisible(false):setIsVisible(true)}}>
                         <ListIcon sx={{color:'whitesmoke'}}/>
                     </IconButton>
                 </div>
-                <span style={{display:isVisible?'inline':'none', width:'100px' }}><Link style={{color:"#660B32"}} onClick={()=>{setIsVisibleRes(true);setIsVisible(false);setIsVisibleRoom(false)}}>Reservations</Link></span>
+                <span style={{display:isVisible?'inline':'none', width:'75px' }}><Link style={{color:"#e0cc1c"}} onClick={()=>{setIsVisibleRes(true);setIsVisible(false);setIsVisibleRoom(false);setIsLandingVisible(false)}}>Reservations</Link></span>
             </div>
         </div>
         <div>
@@ -46,7 +48,14 @@ const HeaderAdminComponent = () =>{
                     <TableReservation/>
                 )
             }
-        </div>
+            {
+                isLandingVisible && (
+                    <div class="intro-text"  style={{fontSize:'50px',fontWeight:'bolder',paddingTop:'200px',background:'url("/images/bg.jpeg")', backgroundSize:'cover', backgroundRepeat:'norepeat', width:'100%', height:'100vh', display:'flex', justifyContent:'center',alignItems:'center'}}>
+                        <div class="intro-heading" style={{color:'#e0cc1c', height:'135px'}}><span><TypeWriterEffectComponent text="Des chambres confortables:Des prix abordables:Un sejour inoubliable"/> </span></div>
+                    </div>
+                )
+            }
+        </div>    
         </>
     );
 }

@@ -16,10 +16,10 @@ import {
   DialogContent,
   TextField,
   InputAdornment,
-  Select
+  Select,
+  InputLabel
 } from "@mui/material";
 import TableComponent from "./TableComponent";
-import TableFooter from "@mui/material/TableFooter";
 import FirstPageIcon from "@mui/icons-material/FirstPage";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
@@ -34,6 +34,10 @@ import EditCalendarRoundedIcon from '@mui/icons-material/EditCalendarRounded';
 import SmartphoneIcon from '@mui/icons-material/Smartphone';
 import BadgeIcon from '@mui/icons-material/Badge';
 import MenuItem from '@mui/material/MenuItem';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import SearchBarAd from "./SearchBarAd";
 
 export default function TableReservation() {
 
@@ -63,6 +67,7 @@ export default function TableReservation() {
     const data = response.data[0].reservations;
     const roomObjects = Object.values(data).filter(obj => typeof obj === 'object');
     setRows(roomObjects);
+    setFilteredRows(roomObjects)
   };
 
   function toFormData(f){
@@ -114,8 +119,20 @@ const [titre, setTitre] = useState('');
 const handleSelectChange = (event) => {
     const selectedItem = event.target.value;
     setTitre(selectedItem);
-    console.log(titre)
 };
+
+const [arrivalDate,setArrivalDate] = useState('')
+const [setOffDate,setSODate] = useState('')
+
+const handleArrivalDateChange = (event) => {
+  const selectedDate = event.target.value;
+  setArrivalDate(selectedDate);
+}
+
+const handleSODateChange = (event) => {
+  const selectedDate = event.target.value;
+  setSODate(selectedDate);
+}
 
 const [roomAvailable,setRoomAvailable] = useState([])
 
@@ -127,8 +144,6 @@ const getRoomAvailable = async () =>{
         );
     setRoomAvailable(roomArray)
 }
-const arrivalDate = useState('')
-const setOffDate = useState('')
 
 const validerClick = async ()=>{
     const fd = {
@@ -147,14 +162,53 @@ const validerClick = async ()=>{
         toast.success(response.data[0].message +' a '+response.data[0].time+". Vous avez 6h pour annuler votre reservation");
 
     }else{
-        console.log("error")
-        toast.error(response.data[0].message);
+      console.log("error")
+      toast.error(response.data[0].message);
     }
+    getAllReservations()
+    getRoomAvailable()
+    setOpenA(false)
 }
+
+const [openM,setOpenM] = useState(false)
+const [idRes, setIdRes] = useState('')
+
+const [radioValue, setRadioValue] = useState('Cancelled');
+
+const handleRadioChange = (event) => {
+  setRadioValue(event.target.value);
+};
+
+const validerMarque = async ()=>{
+  const fd = {
+    "id" : idRes,
+    "radioValue" : radioValue
+  }
+  const f = toFormData(fd)
+  const response = await axios.post(`http://${server}/api/handles.php?action=marqueRes`,f);
+  const data = response.data
+  getAllReservations()
+  getRoomAvailable()
+  setOpenM(false)
+}
+
+const [searchText,setSearchText] = useState('')
+
+const [filteredRows, setFilteredRows] = useState([]);
+
+const handleSearch = (searchText) => {
+  const filteredRows = rows.filter((row) =>
+      row.full_name.includes(searchText) ||
+      row.phone.includes(searchText) ||
+      row.stat.includes(searchText)
+  );
+  setFilteredRows(filteredRows);
+};
+
 
   return (
     <>
-      <ContainerComponent>
+      <ContainerComponent >
         <Card>
           <CardContent style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <Typography
@@ -165,6 +219,7 @@ const validerClick = async ()=>{
             >
               Reservations
             </Typography>
+            <SearchBarAd onSearch={handleSearch}/>
             <Button onClick={()=>{setOpenA(true)}} variant="contained" color="primary" startIcon={<QueueIcon/>} style={{fontWeight:'bolder'}}>Ajouter</Button>
           </CardContent>
 
@@ -178,7 +233,7 @@ const validerClick = async ()=>{
             </TableHead>
             <TableBody>
               {
-                rows.map((row, i) => (
+                filteredRows.map((row, i) => (
                   <TableRow key={i}>
                     <TableCell>
                       {row.id}
@@ -206,7 +261,7 @@ const validerClick = async ()=>{
                     </TableCell>
                     <TableCell>
                       <ButtonGroup>
-                        <Button startIcon={<FlakyIcon/>} variant='contained' color="primary" style={{fontWeight:'bolder'}}>
+                        <Button onClick={()=>{setOpenM(true);setIdRes(row.id)}} startIcon={<FlakyIcon/>} variant='contained' color="primary" style={{fontWeight:'bolder'}}>
                           Marquer
                         </Button>
                       </ButtonGroup>
@@ -223,10 +278,11 @@ const validerClick = async ()=>{
         <DialogContent>
             <h3>Ajouter une reservation</h3>
             <div>
-                <Select fullWidth label='Choisir une chambre' value={titre} onChange={handleSelectChange}>
+                <InputLabel>Selectionner une chambre</InputLabel>
+                <Select fullWidth value={titre} onChange={handleSelectChange}>
                     {
                         roomAvailable.map((room,i)=>(
-                            <MenuItem key={i}>{room.room_number.toUpperCase()}</MenuItem>
+                          <MenuItem key={i} value={room.room_number.toUpperCase()}>{room.room_number.toUpperCase()}</MenuItem>
                         ))
                     }
                 </Select>
@@ -287,6 +343,7 @@ const validerClick = async ()=>{
                             ),
                         }}
                         value={arrivalDate}
+                        onChange={handleArrivalDateChange}
                         
                     />
                 
@@ -307,9 +364,10 @@ const validerClick = async ()=>{
                         ),
                     }}
                     value={setOffDate}
+                    onChange={handleSODateChange}
                     />
                     <div style={{display:'flex', justifyContent:'end', alignItems:'center'}}>
-                        <Button variant='contained' size="large" style={{background:'green', fontWeight:'bold', marginTop: '15px'}}>
+                        <Button variant='contained' onClick={validerClick} size="large" style={{background:'green', fontWeight:'bold', marginTop: '15px'}}>
                             VALIDER
                         </Button>
                         <Button variant='outlined' onClick={()=>{setOpenA(false)}} color="error" size="large" style={{fontWeight:'bold', marginTop: '15px',marginLeft:'15px'}}>
@@ -321,6 +379,27 @@ const validerClick = async ()=>{
                         </div>
         </DialogContent>
     </Dialog>
+    <Dialog open={openM}>
+        <DialogContent>
+            <h3>Marquer le status une reservation</h3>
+            <RadioGroup
+              defaultValue="Cancelled"
+              onChange={handleRadioChange}
+            >
+            <FormControlLabel value="Cancelled" control={<Radio />} label="Marquer 'Annulee'" />
+            <FormControlLabel value="On going" control={<Radio />} label="Marquer 'En cours'" />
+            </RadioGroup>
+              <div style={{display:'flex', justifyContent:'end', alignItems:'center'}}>
+                  <Button variant='contained' onClick={()=>{validerMarque()}} size="medium" style={{background:'green', fontWeight:'bold', marginTop: '15px'}}>
+                      VALIDER
+                  </Button>
+                  <Button variant='outlined' onClick={()=>{setOpenM(false)}} color="error" size="medium" style={{fontWeight:'bold', marginTop: '15px',marginLeft:'15px'}}>
+                      FERMER
+                  </Button>
+              </div>
+        </DialogContent>
+    </Dialog>
+
     </>
   );
 }

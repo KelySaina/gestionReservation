@@ -86,13 +86,13 @@ class Reservation{
     }
 
 
-    public function update_reservation($idRoom, $checkInDate, $checkOutDate, $fullName, $nphone)
+    public function update_reservation($idRoom, $stat)
     {
         $res = array('error' => false);
         
         
-        $stmt = $this->conn->prepare("UPDATE reservation SET check_in_date = ?, check_out_date = ?, full_name = ?, phone = ? WHERE id_room = ?");
-        $stmt->bind_param("sssss", $checkInDate, $checkOutDate, $fullName, $nphone, $idRoom);
+        $stmt = $this->conn->prepare("UPDATE reservation SET  stat = ? WHERE id = ?");
+        $stmt->bind_param("ss", $stat, $idRoom);
         
         if ($stmt->execute()) {
             $res['message'] = 'Reservation updated successfully';

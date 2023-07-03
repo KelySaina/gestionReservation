@@ -231,7 +231,7 @@ export default function TableRoom() {
           </div>
         </DialogContent>
       </Dialog>
-      <ContainerComponent>
+      <ContainerComponent >
         <Card>
           <CardContent>
             <Typography

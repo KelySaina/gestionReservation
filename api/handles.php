@@ -50,6 +50,10 @@
         array_push($result, $reservation->cancel_reservation($_POST['id']));
     }
 
+    if($action == 'marqueRes'){
+        array_push($result, $reservation->update_reservation($_POST['id'], $_POST['radioValue']));
+    }
+
 
     if($action == 'postReservation'){
         $checkInDate = $_POST['dateA'];
