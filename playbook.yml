@@ -1,0 +1,38 @@
+---
+- name: Clone Repository and Configure Node.js App
+  hosts: nodejs_servers
+  become: yes
+
+  tasks:
+    - name: Clone Git Repository
+      git:
+        repo: https://github.com/KelySaina/gestionReservationChambres.git
+        dest: /home/thyler/odataProjects/gestionReservationChambres
+
+    - name: Install Node.js dependencies
+      command: npm install
+      args:
+        chdir: /home/thyler/odataProjects/gestionReservationChambres
+
+    - name: Build Node.js App
+      command: npm run build
+      args:
+        chdir: /home/thyler/odataProjects/gestionReservationChambres
+    
+    - name: Create service file
+      template:
+        src: service_3000.j2  # Create a Jinja2 template for your service file
+        dest: /etc/systemd/system/service_4000.service
+      notify:
+        - Reload systemd
+
+    - name: Start and enable service
+      systemd:
+        name: service_4000
+        enabled: yes
+        state: started
+
+  handlers:
+    - name: Reload systemd
+      systemd:
+        daemon_reload: yes

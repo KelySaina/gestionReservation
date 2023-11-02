@@ -1,0 +1,11 @@
+[Unit]
+Description=Your Service Description
+
+[Service]
+ExecStart=/usr/local/bin/serve -s build
+User=root
+Group=root
+WorkingDirectory=/home/thyler/odataProjects/gestionReservationChambres
+
+[Install]
+WantedBy=multi-user.target
