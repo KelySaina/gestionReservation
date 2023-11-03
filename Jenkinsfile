@@ -9,7 +9,7 @@ pipeline {
     stage('Git') {
       steps {
         // Clone the repository into a specific directory
-        git url: 'https://github.com/KelySaina/gestionReservationChambres', branch: 'main'
+        git url: 'https://github.com/KelySaina/gestionReservationChambres', branch: 'master'
       }
     }
 
