@@ -20,6 +20,7 @@
         dest: /etc/systemd/system/service_4000.service
       notify:
         - Reload systemd
+        - Restart service
 
     - name: Start and enable service
       systemd:
@@ -31,3 +32,8 @@
     - name: Reload systemd
       systemd:
         daemon_reload: yes
+
+    - name: Restart service
+      systemd:
+        name: service_4000
+        state: restarted
