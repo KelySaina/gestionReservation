@@ -13,11 +13,6 @@
       command: npm install
       args:
         chdir: /home/thyler/odataProjects/gestionReservationChambres
-
-    - name: Build Node.js App
-      command: npm run build
-      args:
-        chdir: /home/thyler/odataProjects/gestionReservationChambres
     
     - name: Create service file
       template:
